@@ -1,0 +1,105 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+group = mod_group_id
+version = mod_version
+archivesBaseName = mod_id
+
+// Run Gradle on JDK 21+; the -release flag keeps the bytecode Java 17 compatible
+// (required by Minecraft 1.20.1 / Forge 47).
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
+    runs {
+        configureEach {
+            jvmArgs = [
+                    "-XX:+IgnoreUnrecognizedVMOptions",
+                    "-XX:+AllowEnhancedClassRedefinition"
+            ]
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+        client {
+            workingDirectory project.file('run/client')
+        }
+        server {
+            args '--nogui'
+        }
+        data {
+            workingDirectory project.file('run')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
+
+repositories {
+    mavenCentral()
+    // Local mod jars for compile-time linking (properly deobfuscated via fg.deobf).
+    flatDir { dirs 'libs' }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // Local jars: Punchy 2.7 and KubeJS 6 (compile-only bridges; NOT bundled into the output jar)
+    implementation fg.deobf("punchy:punchy:2.7")
+    implementation fg.deobf("kubejs:kubejs:2001.6.5")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+processResources {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version          : forge_version,
+            forge_version_range    : forge_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                "Implementation-Title"  : project.name,
+                "Implementation-Version": "${version}",
+                "MixinConfigs"          : "${mod_id}.mixins.json"
+        ])
+    }
+    finalizedBy 'reobfJar'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}

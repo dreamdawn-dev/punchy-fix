@@ -1,0 +1,3 @@
+# KubeJS 6 discovers addon plugins from this file (META-INF/services is NOT used by 2001.6.x).
+# Format: <class name> [client] [required mod id]...
+com.punchyfix.kubejs.PunchyKubeJSPlugin client
