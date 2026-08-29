@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.punchyfix.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "punchyfix.refmap.json",
+    "client": [
+        "client.LivingEntitySwingBridgeMixin",
+        "client.MinecraftAttackGuardMixin",
+        "client.MultiPlayerGameModeMiningGuardMixin",
+        "client.ClientPacketListenerAnimateMixin",
+        "client.MultiPlayerGameModeUseGuardMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
