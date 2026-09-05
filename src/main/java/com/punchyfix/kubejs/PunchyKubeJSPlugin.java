@@ -5,8 +5,8 @@ import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 
 /**
- * KubeJS 6 plugin. Registered via
- * META-INF/services/dev.latvian.mods.kubejs.KubeJSPlugin.
+ * KubeJS 6 插件。通过 META-INF/services/dev.latvian.mods.kubejs.KubeJSPlugin
+ * 注册。
  */
 public final class PunchyKubeJSPlugin extends KubeJSPlugin {
   @Override

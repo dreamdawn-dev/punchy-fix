@@ -17,10 +17,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Marks client-initiated use/interact flows so the swing bridge can tell a
- * server swing echo of that flow (suppress: Punchy already animated it) apart
- * from an external server swing such as KubeJS {@code player.swing()} in
- * server scripts (bridge).
+ * 标记客户端发起的使用/交互流程，使桥接逻辑能够区分该流程的服务端挥臂回显
+ *（抑制：Punchy 已播放动画）和外部服务端挥臂（如 KubeJS 服务端脚本中的
+ * {@code player.swing()}，需要桥接）。
  */
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MultiPlayerGameModeUseGuardMixin {

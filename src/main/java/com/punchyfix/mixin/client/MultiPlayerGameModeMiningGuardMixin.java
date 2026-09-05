@@ -10,15 +10,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Marks destroy-block requests so mining swings (local call and server echo)
- * are not converted into use-item animations.
+ * 标记挖掘方块请求，防止挖掘挥臂（本地调用和服务端回显）被转换为使用物品动画。
  * <p>
- * Each tick while holding left-click on the same block, the vanilla client
- * calls {@code continueDestroyBlock} which internally calls
- * {@code player.swing(MAIN_HAND)}. Without refreshing the mining timestamp
- * here, the echo window expires after {@code miningEchoWindowMs} (default 1s)
- * and every subsequent tick's swing gets bridged into a use-item animation,
- * causing the arm to flail rapidly.
+ * 在按住左键挖掘同一方块时，原版客户端每 tick 都会调用
+ * {@code continueDestroyBlock}，其内部会调用
+ * {@code player.swing(MAIN_HAND)}。如果不在此处刷新挖掘时间戳，
+ * 回显窗口会在 {@code miningEchoWindowMs}（默认 1 秒）后过期，
+ * 导致后续每 tick 的挥臂都被桥接为使用物品动画，造成手臂快速抽动。
  */
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MultiPlayerGameModeMiningGuardMixin {

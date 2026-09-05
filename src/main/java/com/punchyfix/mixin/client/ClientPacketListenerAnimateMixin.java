@@ -11,14 +11,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Marks server swing echoes so the bridge never converts them into use-item
- * animations. When the server swings the local player's arm (attack echo,
- * mining echo, or the {@code shouldSwing()} result of an entity interaction /
- * item use), it sends {@code ClientboundAnimatePacket} with action 0 (main
- * hand) or 3 (off hand); the client applies it here by calling
- * {@code LivingEntity.swing(hand)} synchronously. Punchy has already tracked
- * the originating action locally, so re-bridging this echo would restart or
- * override the custom animation and make it stutter.
+ * 标记服务端挥臂回显，防止桥接逻辑将其转换为使用物品动画。
+ * 当服务端挥动本地玩家的手臂时（攻击回显、挖掘回显，或实体交互/物品使用中
+ * {@code shouldSwing()} 的结果），它会发送 action 为 0（主手）或 3（副手）的
+ * {@code ClientboundAnimatePacket}；客户端在此处通过同步调用
+ * {@code LivingEntity.swing(hand)} 来处理它。Punchy 已在本地追踪了原始动作，
+ * 重新桥接此回显会导致自定义动画被重新开始或覆盖，造成卡顿。
  */
 @Mixin(ClientPacketListener.class)
 public abstract class ClientPacketListenerAnimateMixin {

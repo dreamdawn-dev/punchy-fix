@@ -8,9 +8,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Marks client attack requests so the swing bridge does not convert real attack
- * swings
- * (including the multiplayer server echo) into use-item animations.
+ * 标记客户端攻击请求，防止桥接逻辑将真正的攻击挥臂
+ *（包括多人游戏的服务端回显）转换为使用物品动画。
  */
 @Mixin(Minecraft.class)
 public abstract class MinecraftAttackGuardMixin {

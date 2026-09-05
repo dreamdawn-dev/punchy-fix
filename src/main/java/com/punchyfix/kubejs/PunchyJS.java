@@ -12,22 +12,22 @@ import punchy.client.animation.data.AnimationClip;
 import punchy.config.PunchyConfig;
 
 /**
- * Client-side KubeJS binding ({@code PunchyJS}).
+ * 客户端 KubeJS 绑定（{@code PunchyJS}）。
  */
 public final class PunchyJS {
 
   /**
-   * Triggers Punchy's normal item-use animation on the main hand.
-   * Equivalent to an external {@code player.swing()} call.
+   * 在主手上触发 Punchy 的正常物品使用动画。
+   * 等效于外部的 {@code player.swing()} 调用。
    */
   public boolean swing() {
     return swing("main");
   }
 
   /**
-   * Triggers Punchy's normal item-use animation.
+   * 触发 Punchy 的正常物品使用动画。
    *
-   * @param hand "main"/"mainhand" or "off"/"offhand"/"left"
+   * @param hand "main"/"mainhand" 表示主手，或 "off"/"offhand"/"left" 表示副手
    */
   public boolean swing(String hand) {
     Minecraft mc = Minecraft.getInstance();
@@ -53,8 +53,7 @@ public final class PunchyJS {
   }
 
   /**
-   * Name of the Punchy animation clip currently blended on the pose handler, or
-   * null.
+   * 当前在 Pose 处理器上混合的 Punchy 动画片段名称，无动画时返回 null。
    */
   public String getCurrentClip() {
     if (!isLoaded()) {
@@ -64,7 +63,7 @@ public final class PunchyJS {
     return clip == null ? null : clip.getName();
   }
 
-  /** "RIGHT", "LEFT" or null when both arms are active. */
+  /** "RIGHT"、"LEFT"，当双臂都处于活动状态时返回 null。 */
   public String getActiveArm() {
     if (!isLoaded()) {
       return null;
